@@ -183,7 +183,7 @@ def delete_user(id):
         return redirect(url_for('main.users', username=username))
     flash('You are not authorised to perform function.')
     logout_user()
-    #return redirect(url_for('main.index'))
+    return redirect(url_for('main.index'))
 
 @main.route('/delete_opportunity/<int:id>', methods=['GET','POST'])
 @login_required
@@ -211,6 +211,4 @@ def delete_account(id):
         flash('Account successfully deleted.')
         return redirect(url_for('.accounts', username=username))
     flash("you are not authorized to perform function.")
-    #return redirect(url_for('auth.login')
-        
-    
+    return redirect(url_for('auth.login'))

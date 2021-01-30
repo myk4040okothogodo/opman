@@ -9,7 +9,6 @@ from flask_login import LoginManager
 from flask_pagedown import PageDown
 
 
-
 bootstrap = Bootstrap()
 mail = Mail()
 moment = Moment()
