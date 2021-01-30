@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+{% block title %}  {{title}}{{ user.username }}{% endblock %}
+{% block page_content %}
+<div class="page-header">
+    <h1>{{ title }}</h1>
+</div>
+<table class="table table-hover followed_by">
+    <thead><tr><th>Account-Creator</th><th>Company-Name</th><th>Company-Address</th><th>Total-open-positions</th><th>Account-Creation-Time</th></tr></thead>
+    {% for account in accounts %}
+    <tr>
+        <td>
+            <a href="{{ url_for('.user', username=account.creator.username ) }}">
+                <img class="img-rounded" src="{{account.creator.gravatar(size=32)}}">
+                {{ account.creator.username }}
+            </a>
+        </td>
+        <td> {{ account.company_name }}</td>
+        <td> {{ account.company_address }}</td>
+        <td> {{ account.opportunities.count() }}</td>
+        <td> {{ moment(account.timestamp).format('LL')}}</td>
+        {% if current_user.is_administrator or current_user== account.creator %}
+        <td><a href="{{ url_for('.delete_account', id = account.id) }}"><span class="label label-danger">delete_account?</span></a></td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+<div class ="pagination">
+    {{ macros.pagination_widget(pagination, endpoint, username=user.username) }} 
+</div>
+{% endblock %}                   
+

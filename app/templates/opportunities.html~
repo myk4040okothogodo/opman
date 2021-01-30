@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+{% block title %}  {{title}}{{ user.username }}{% endblock %}
+{% block page_content %}
+<div class="page-header">
+    <h1>{{ title }}</h1>
+</div>
+<table class="table table-hover followed_by">
+    <thead><tr><th>Opportunity-author</th><th>Account</th><th>Vacanct-position</th><th>Number</th><th>Time-posted</th></tr></thead>
+    {% for opportunity in opportunities %}
+    <tr> 
+        <td>
+            <a href="{{ url_for('.user', username=opportunity.author.username) }}">
+                <img class="img-rounded" src="{{ opportunity.author.gravatar(size=32)}}">
+                {{ opportunity.author.username }}
+            </a>
+        </td>
+        <td> {{ opportunity.account.company_name }}</td>
+        <td> {{ opportunity.position_name }}</td>
+        <td> {{ opportunity.no_of_positions }}</td>
+        <td> {{ moment(opportunity.timestamp).format('LL')}}</td>
+        {% if current_user.is_administrator | current_user==opportunity.author %}
+        <td><a href="{{ url_for('.delete_opportunity', id = opportunity.id) }}"><span class="label label-danger">delete_opportunity?</span></a></td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+<div class ="pagination">
+    {{ macros.pagination_widget(pagination, endpoint, username=user.username) }} 
+</div>
+
+
+
+{% endblock %}                   
+

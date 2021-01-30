@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+{% block title %}  {{title}}{% endblock %}
+{% block page_content %}
+<div class="page-header">
+    <h1>{{ title }}</h1>
+</div>
+<table class="table table-hover followed_by">
+    <thead><tr><th>User</th><th>Accounts-Held</th><th>Vacancies-Posted</th><th>Member_since</th><th>Descripion</th></tr></thead>
+    {% for user in users %}
+    <tr>
+        
+        <td>
+            <a href="{{ url_for('.user', username=user.username) }}">
+                <img class="img-rounded" src="{{ user.gravatar(size=32) }}">
+                {{ user.username }}
+            </a>
+        </td>
+        <a href="{{ url_for('.user',username=user.username) }}">
+        <td> {{ user.accounts.count() }}</td>
+        </a>
+        <a href ="{{ url_for('.user', username=user.username) }}">
+        <td> {{ user.opportunities.count() }}</td>
+        </a>
+        <td> {{ moment(user.member_since).format('LL') }}</td>
+        <td> {{  user.about_me }}</td>
+        {% if user.is_administrator %}
+        <td><a href="{{ url_for('.delete_user', id = user.id) }}"><span class="label label-danger">delete_user?</span></a></td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+<div class ="pagination">
+    {{ macros.pagination_widget(pagination, endpoint, username=user.username) }} 
+</div>
+{% endblock %}                   
+

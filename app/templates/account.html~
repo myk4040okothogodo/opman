@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+{% block title %} Opportunity-Management {% endblock %}
+{% block page_content %}
+
+<div>
+    <h2>{{accounts[0].company_name }}'s open Positions</h2>
+</div>    
+    {% if accounts[0].opportunities.count() > 0 %}
+    
+
+<table class="table table-hover followers">
+    <thead><tr><th>Vacant-Position</th><th>Number</th><th>Time-Posted</th></tr></thead>
+    {% for opportunity in opportunities %}
+ 
+    <tr>
+        <td>{{ opportunity.position_name }}</td>
+        <td>{{ opportunity.no_of_positions}}</td>
+        <td> {{ moment(opportunity.timestamp).format('LLL') }}</td>
+    </tr>
+    {% endfor %}
+    
+</table>
+    {% if accounts[0].creator.is_administrator or current_user == accounts[0].creator %}
+    <td><a href="{{ url_for('.delete_account', id= accounts[0].id ) }}">delete_account?</a></td>
+    {% endif %}
+
+<div class ="pagination">
+    {{ macros.pagination_widget(pagination, '.account', id=accounts[0].id) }} 
+</div>
+      {% else %}
+      <p>There are currently no open positions at <em>{{accounts[0].company_name }}</em>, check this page regularly for updates! </p>
+      {% endif %}
+      {% if current_user.username == accounts[0].creator.username %}
+      <p>    
+          New Opportunity?
+          <a href="{{ url_for('.add_opportunity', id=accounts[0].id ) }}"><strong>click-here to post it.</strong></a>
+      </p>
+      {% else %}
+      {% endif %}
+      
+
+{% endblock %}                   
+
